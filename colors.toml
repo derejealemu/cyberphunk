@@ -1,0 +1,61 @@
+mode = "dark"
+
+# accent drives active elements, shell border fallback
+accent = "#22e4ff"
+selection = "#14294a"
+muted = "#4a6b82"
+
+# ── surface ladder ────────────────────────────────────────────────────────────
+background = "#060a14"
+dark_background = "#04070f"
+darker_background = "#010206"
+lighter_background = "#101e36"
+
+# ── text ladder ───────────────────────────────────────────────────────────────
+foreground = "#e8fcff"
+dark_foreground = "#4a6b82"
+light_foreground = "#9fb6c8"
+bright_foreground = "#e8fcff"
+
+# ── cursor / selection (used by both the runtime and the theme scraper) ──────
+cursor = "#22e4ff"
+selection_foreground = "#e8fcff"
+selection_background = "#14294a"
+
+# ── signature hyprland active border: neon cyan → magenta glow ───────────────
+hyprland_active_border = "rgba(22e4ffee) rgba(ff6bd6ee) 45deg"
+
+# ── 16-color palette (flat colorN form — what omarchytheme.com scrapes) ──────
+color0 = "#010206"   # black   (darker_background)
+color1 = "#ff3b6b"   # red
+color2 = "#44ffaa"   # green
+color3 = "#ffaa33"   # yellow
+color4 = "#3ac8ff"   # blue
+color5 = "#ff6bd6"   # magenta
+color6 = "#22e4ff"   # cyan
+color7 = "#e8fcff"   # white   (bright_foreground)
+color8 = "#4a6b82"   # bright black (dark_foreground)
+color9 = "#ff4d7a"   # bright red
+color10 = "#7dffcb"  # bright green
+color11 = "#ffc46b"  # bright yellow
+color12 = "#6bd4ff"  # bright blue
+color13 = "#ff8fe0"  # bright magenta
+color14 = "#6befff"  # bright cyan
+color15 = "#e8fcff"  # bright white
+
+# ── named synonyms (consumed by Omarchy's own theme template engine) ─────────
+red = "#ff3b6b"
+yellow = "#ffaa33"
+orange = "#ff7a33"
+green = "#44ffaa"
+cyan = "#22e4ff"
+blue = "#3ac8ff"
+magenta = "#ff6bd6"
+brown = "#8a6b46"
+
+bright_red = "#ff4d7a"
+bright_yellow = "#ffc46b"
+bright_green = "#7dffcb"
+bright_cyan = "#6befff"
+bright_blue = "#6bd4ff"
+bright_magenta = "#ff8fe0"

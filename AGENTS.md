@@ -30,20 +30,28 @@ Rules for AI co-editors (and humans) working in this repo.
 
 ## Where things live
 
-- `src/plugin.ts` — the only runtime artifact. All UI logic, verbs, event
-  handlers live here.
+The repo is a **canonical Omarchy theme** (so it lists on omarchytheme.com):
+the theme files live at the **repo root**, and the opencode TUI plugin is an
+add-on under `src/`.
+
+- `colors.toml` — the **Omarchy** palette. Single source of truth for the whole
+  desktop (borders, terminals, btop, editors, lock) AND the palette the
+  omarchytheme.com scraper reads. Keep its hex colors consistent with
+  `src/cyberphunk.theme.json` when you change the palette. Must stay at the
+  repo **root** for the theme scraper to find it.
+- `preview.png` — required by the theme scraper (theme card image).
+- `preview-unlock.png`, `unlock.png`, `backgrounds/*.png` — desktop art.
+  Generated (SVG→PNG); regenerate rather than hand-edit if the look changes.
+- `icons.theme`, `lazygit.yml` — icon-set preference and matching lazygit palette.
+- `src/plugin.ts` — the opencode TUI plugin (entry point; all UI logic, verbs,
+  event handlers).
 - `src/cyberphunk.theme.json` — the opencode TUI theme (12 colors + semantic
   aliases). Keep in sync with `~/.config/opencode/themes/cyberphunk.json`.
-- `theme/colors.toml` — the **Omarchy** palette. Single source of truth for the
-  whole desktop (borders, terminals, btop, editors, lock). Keep its 16 hex
-  colors consistent with `src/cyberphunk.theme.json` when you change the palette.
-- `theme/backgrounds/`, `theme/preview*.png`, `theme/unlock.png` — desktop art.
-  Generated (SVG→PNG); regenerate rather than hand-edit if the look changes.
-- `theme/lazygit.yml` — matching lazygit theme (installed by `install-theme.sh`).
+  (Distinct from the root `colors.toml` — different file, different consumer.)
 - `install.sh` — one-liner installer for the TUI. Idempotent. Backs up `tui.json`.
 - `install-theme.sh` — one-liner installer for the Omarchy desktop theme. Idempotent;
-  stages `theme/` → `~/.config/omarchy/themes/cyberphunk`, offers the lazygit palette,
-  never overwrites an existing `~/.config/lazygit/config.yml`.
+  stages the root theme files → `~/.config/omarchy/themes/cyberphunk`, offers the
+  lazygit palette, never overwrites an existing `~/.config/lazygit/config.yml`.
 - `tui.json` (in the *user's* `~/.config/opencode/`) — what actually loads
   the plugin at runtime. Do not commit a `tui.json` in this repo; it's a
   per-machine config.
