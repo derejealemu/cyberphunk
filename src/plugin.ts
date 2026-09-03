@@ -245,24 +245,34 @@ async function run(api: any) {
   }
 
   // 4. Splash — staged boot, hold on READY long enough to read, then clear.
-  //    Timer hygiene: every timeout handle is tracked; any user interaction
-  //    with the dialog system (deck open, esc, another dialog replace) bumps
-  //    splashGen so pending splash timers no-op instead of stomping the
-  //    user's dialog, and the trailing clear() only fires while the splash
-  //    generation is still the active one.
+  //    The host FIRES the prior dialog's onClose on every dialog.replace()/
+  //    clear() (verified in the host binary: it walks the dialog stack and
+  //    calls each onClose before swapping in the new one). So the splash wires
+  //    its teardown to that onClose — the one mechanism an external dialog
+  //    (the deck opening, esc) actually triggers. The trap: our OWN
+  //    frame-to-frame replace would fire that same onClose and cancel the
+  //    boot mid-animation (freezing at frame 1). `advancing` is true only
+  //    across our replace calls, so the onClose invalidates for EXTERNAL
+  //    teardown but ignores our own boot frames.
   try {
     if (isOn(api)) {
       const STEP = 380, HOLD = 1700;
       let splashGen = 0;
+      let advancing = false; // true only while our own frame-advance replace runs
       const timers: ReturnType<typeof setTimeout>[] = [];
       const cancelTimers = () => { for (const t of timers) clearTimeout(t); timers.length = 0; };
       const invalidate = () => { splashGen++; cancelTimers(); };
       const show = (gen: number, frame: number) => {
-        if (gen !== splashGen) return; // superseded — never touch the dialog
+        if (gen !== splashGen) return; // externally superseded — never touch the dialog
+        advancing = true;
         try {
-          api.ui.dialog.replace(() => createComponent(SplashFrame as any, { api, frame }), invalidate);
+          api.ui.dialog.replace(
+            () => createComponent(SplashFrame as any, { api, frame }),
+            () => { if (!advancing) invalidate(); } // external esc/replace — not our own boot
+          );
           api.ui.dialog.setSize("xlarge");
         } catch (e) { errlog("splash", e); }
+        finally { advancing = false; }
       };
       const clearIfOurs = (gen: number) => {
         if (gen !== splashGen) return; // user opened something else — leave it alone
@@ -272,10 +282,6 @@ async function run(api: any) {
       show(gen, 0);
       for (let f = 1; f <= STAGES.length; f++) timers.push(setTimeout(() => show(gen, f), STEP * f));
       timers.push(setTimeout(() => clearIfOurs(gen), STEP * STAGES.length + HOLD));
-      // User opening the deck / any verb during the splash kills the splash timers.
-      for (const ev of ["keydown", "dialog.replace"]) {
-        try { api.event?.on?.(ev as any, invalidate); } catch {}
-      }
       probe("splash");
     }
   } catch (e) {
