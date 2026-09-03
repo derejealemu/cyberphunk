@@ -126,8 +126,8 @@ const Pill = ({ api }: any) => {
 // The square face wears an afro — a curl dome that flares FULL-WIDTH at the
 // base (wide-brim, not a toque) and tapers to a rounded crown; the face is
 // centered beneath it. Curled in ░█ (same block language as the boot bar).
+// (Topmost row dropped — it read conical at splash size.)
 const EMBLEM: string[] = [
-  "    ░█░█░█░█░█░█░█░█░    ",
   "  ░█░█░█░█░█░█░█░█░█░█░  ",
   " ░█░█░█░█░█░█░█░█░█░█░█░ ",
   "░█░█░█░█░█░█░█░█░█░█░█░█░",
