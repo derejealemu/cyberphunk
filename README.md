@@ -1,7 +1,9 @@
 # CyberPhunk
 
-Cyberpunk reskin for the **opencode** 1.18+ TUI. One plugin file + one theme,
-loaded through opencode's standard plugin API. No fork, no wrapper, no daemon.
+Cyberpunk reskin. The core is an **opencode** 1.18+ TUI plugin (one plugin file
++ one theme, loaded through opencode's standard plugin API — no fork, wrapper,
+or daemon). A matching **Omarchy desktop theme** ships alongside: same palette,
+applied system-wide with one `omarchy` command.
 
 - Neon palette (cyan / pink / amber / slate) via the built-in theme API
 - Logo + footer brand, a 1.5 s boot splash
@@ -41,6 +43,23 @@ rm ~/.config/opencode/plugins/cyberphunk.ts
 # remove the plugin entry from ~/.config/opencode/tui.json
 ```
 
+## Omarchy desktop theme (optional)
+
+The `theme/` directory is a complete [Omarchy](https://omarchy.org) theme using
+the same palette: wallpaper/ladder, active-border gradient, all terminals
+(foot/alacritty/kitty), btop, helix, neovim, VS Code, and a synthesized
+lock-screen / theme-picker wordmark. The palette lives in one file —
+`theme/colors.toml` — and every app config is generated from it by Omarchy.
+
+```sh
+bash install-theme.sh        # stages ~/.config/omarchy/themes/cyberphunk (+ optional lazygit palette)
+omarchy theme set cyberphunk # apply
+omarchy theme set catppuccin # revert to your previous theme
+```
+
+On a non-Omarchy machine, drop `theme/` into `~/.config/omarchy/themes/` (or
+point the relevant apps at `theme/colors.toml` / `theme/lazygit.yml`).
+
 ## Keyboard & verbs
 
 | What                  | Keyboard        | Verb               |
@@ -70,9 +89,16 @@ for the probe lines. There is no build step; the file ships as-is.
 
 ```
 src/plugin.ts            # the plugin (entry point)
-src/cyberphunk.theme.json# the theme
+src/cyberphunk.theme.json# the opencode TUI theme
 
-install.sh               # one-line installer (idempotent, backs up tui.json)
+theme/colors.toml        # the Omarchy palette (single source of truth)
+theme/backgrounds/*.png  # synthwave wallpapers + lock-screen art
+theme/preview*.png       # theme-picker art
+theme/icons.theme        # icon set preference
+theme/lazygit.yml        # lazygit theme (optional, installed by install-theme.sh)
+
+install.sh               # one-line installer for the opencode TUI (idempotent)
+install-theme.sh         # one-line installer for the Omarchy desktop theme
 package.json  tsconfig.json  AGENTS.md
 ```
 
