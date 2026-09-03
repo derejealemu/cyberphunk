@@ -1,11 +1,17 @@
 # CyberPhunk
 
 > _the fook is in the machine_
+> _that's P-Funk in the machine. that's funkadelic, baby._
 
-It's 2077 in your terminal, and the neon is the new black. CyberPhunk is a
-cyberpunk reskin for [Omarchy](https://omarchy.org) and [opencode](https://opencode.ai) —
-one shared palette (cyan / pink / amber on a near-black grid) bolted onto the
-whole machine. We don't just ship a color file; we ship a mood.
+It's 2077 in your terminal, and the neon is the new black. Cyber**Phunk**
+sits on the Phunk on purpose — [the Mothership](https://en.wikipedia.org/wiki/Mothership)
+glow meets a [James Brown](https://en.wikipedia.org/wiki/James_Brown) "Cold
+Sweat" groove run through a synthesizer. We don't get it — we *got* it.
+
+This is a cyberpunk reskin for [Omarchy](https://omarchy.org) and
+[opencode](https://opencode.ai) — one shared palette (cyan / pink / amber on a
+near-black grid) bolted onto the whole machine. Get down: we don't ship a
+color file, we ship a *rhythm section*.
 
 Two kits, one fook:
 
