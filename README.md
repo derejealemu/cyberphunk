@@ -3,6 +3,10 @@
 > _the fook is in the machine_
 > _that's P-Funk in the machine. that's funkadelic, baby._
 
+<p align="center">
+  <img src="preview.png" width="560" alt="CYBERPHUNK — the neon wordmark this theme paints everywhere">
+</p>
+
 It's 2077 in your terminal, and the neon is the new black. The Mothership glow meets a funky James Brown "Cold
 Sweat" groove run through a synthesizer. We don't get it — we *got* it.
 
@@ -28,6 +32,20 @@ itself.
 
 **[![omarchytheme.com](https://img.shields.io/badge/omarchytheme.com-in%20the%20gallery-blue?style=flat-square)](https://omarchytheme.com)**
 [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
+
+## The palette
+
+One hex, the whole rig. The signature is **cyan `#22e4ff` → magenta `#ff6bd6`**
+on the active border — the rest of the surface ladder, text, and cursor hang
+off those two:
+
+| | | | | | | |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="https://img.shields.io/badge/CYAN-22E4FF-22e4ff?style=flat-square&label=" width="132"> | <img src="https://img.shields.io/badge/MAGENTA-FF6BD6-ff6bd6?style=flat-square&label=" width="132"> | <img src="https://img.shields.io/badge/ORANGE-FF7A33-ff7a33?style=flat-square&label=" width="132"> | <img src="https://img.shields.io/badge/GREEN-44FFAA-44ffaa?style=flat-square&label=" width="132"> | <img src="https://img.shields.io/badge/BLUE-3AC8FF-3ac8ff?style=flat-square&label=" width="132"> | <img src="https://img.shields.io/badge/RED-FF3B6B-ff3b6b?style=flat-square&label=" width="132"> | <img src="https://img.shields.io/badge/PAPER-E8FCFF-060a14?style=flat-square&label=" width="132"> |
+| `#22e4ff` | `#ff6bd6` | `#ff7a33` | `#44ffaa` | `#3ac8ff` | `#ff3b6b` | `#e8fcff` |
+
+All sixteen live in `colors.toml`, so a single edit re-gloves terminals,
+editors, btop, the bar, the lock screen, and the TUI in one pass.
 
 ## Requirements
 
@@ -72,6 +90,10 @@ omarchy theme set cyberphunk
 - `backgrounds/1-synthwave-hero.png` + `backgrounds/2-synthwave-sun.png` —
   two synthwave scenes. They're your wallpaper *and* your lock screen (Omarchy
   blurs the current wallpaper behind the lock panel).
+
+<p align="center">
+  <img src="backgrounds/2-synthwave-sun.png" width="720" alt="a synthwave scene from backgrounds/ — the wallpaper and lock-screen art">
+</p>
 - `preview.png`, `preview-unlock.png`, `unlock.png` — the neon wordmark that
   shows up in the theme picker and at unlock.
 - `icons.theme` — `Yaru-magenta-dark`, so the icons stop yelling.
