@@ -226,9 +226,11 @@ async function run(api: any) {
     for (const ev of events) {
       try { api.event.on(ev, (p: any) => push(ev, p)); } catch {}
     }
-    // Attention: fire a desktop notification on error/question/permission (blurred only)
+    // Attention: fire a desktop notification on error/question/permission (blurred only).
+    // Honors /cyberphunk.off — notifications are part of what "off" mutes, per README.
     try {
       api.event.on("session.error", (p: any) => {
+        if (!isOn(api)) return; // muted — off means off
         try {
           api.attention?.notify({
             title: "CYBERPHUNK · session error",
@@ -243,18 +245,37 @@ async function run(api: any) {
   }
 
   // 4. Splash — staged boot, hold on READY long enough to read, then clear.
+  //    Timer hygiene: every timeout handle is tracked; any user interaction
+  //    with the dialog system (deck open, esc, another dialog replace) bumps
+  //    splashGen so pending splash timers no-op instead of stomping the
+  //    user's dialog, and the trailing clear() only fires while the splash
+  //    generation is still the active one.
   try {
     if (isOn(api)) {
-      const show = (frame: number) => {
+      const STEP = 380, HOLD = 1700;
+      let splashGen = 0;
+      const timers: ReturnType<typeof setTimeout>[] = [];
+      const cancelTimers = () => { for (const t of timers) clearTimeout(t); timers.length = 0; };
+      const invalidate = () => { splashGen++; cancelTimers(); };
+      const show = (gen: number, frame: number) => {
+        if (gen !== splashGen) return; // superseded — never touch the dialog
         try {
-          api.ui.dialog.replace(() => createComponent(SplashFrame as any, { api, frame }), () => {});
+          api.ui.dialog.replace(() => createComponent(SplashFrame as any, { api, frame }), invalidate);
           api.ui.dialog.setSize("xlarge");
         } catch (e) { errlog("splash", e); }
       };
-      const STEP = 380, HOLD = 1700;
-      show(0);
-      for (let f = 1; f <= STAGES.length; f++) setTimeout(() => show(f), STEP * f);
-      setTimeout(() => { try { api.ui.dialog.clear(); } catch {} }, STEP * STAGES.length + HOLD);
+      const clearIfOurs = (gen: number) => {
+        if (gen !== splashGen) return; // user opened something else — leave it alone
+        try { api.ui.dialog.clear(); } catch {}
+      };
+      const gen = splashGen;
+      show(gen, 0);
+      for (let f = 1; f <= STAGES.length; f++) timers.push(setTimeout(() => show(gen, f), STEP * f));
+      timers.push(setTimeout(() => clearIfOurs(gen), STEP * STAGES.length + HOLD));
+      // User opening the deck / any verb during the splash kills the splash timers.
+      for (const ev of ["keydown", "dialog.replace"]) {
+        try { api.event?.on?.(ev as any, invalidate); } catch {}
+      }
       probe("splash");
     }
   } catch (e) {

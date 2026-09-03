@@ -31,8 +31,14 @@ path, plugin = sys.argv[1], sys.argv[2]
 data = {}
 if os.path.exists(path):
     with open(path) as f:
-        try: data = json.load(f)
-        except Exception: data = {}
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError as e:
+            # Malformed tui.json: abort loudly instead of silently rebuilding it.
+            # The backup we just made has the user's original bytes.
+            print(f"ERROR: {path} is not valid JSON ({e}).", file=sys.stderr)
+            print(f"       Fix it (or restore the .bak just created) and re-run install.sh. Nothing was changed.", file=sys.stderr)
+            sys.exit(1)
 data.setdefault("$schema", "https://opencode.ai/tui.json")
 data["theme"] = "cyberphunk"
 plugins = data.get("plugin") or []

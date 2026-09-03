@@ -61,8 +61,10 @@ omarchy theme set cyberphunk
 ## What the desktop theme ships
 
 - `colors.toml` — **the** source of truth. One file, sixteen neon colors, the
-  surface ladder, and the cyan→magenta `hyprland_active_border` signature.
-  Omarchy reads it and paints everything else.
+  surface ladder. Omarchy reads it and paints everything else.
+- `hyprland.conf` — the signature: a neon cyan→magenta **gradient** on the
+  active window border (ships as a theme-dir override, the same mechanism
+  retro-82/kanagawa/lumon use).
 - `backgrounds/1-synthwave-hero.png` + `backgrounds/2-synthwave-sun.png` —
   two synthwave scenes. They're your wallpaper *and* your lock screen (Omarchy
   blurs the current wallpaper behind the lock panel).
@@ -77,7 +79,7 @@ omarchy theme set cyberphunk
 - The neon palette, applied through opencode's own theme API.
 - A **boot splash** that looks like it's *waking the machine up*: emblem,
   wordmark, each subsystem lighting up in turn, a boot bar that fills, then a
-  `READY TO FOOKE` hold.
+  `◆ READY — press a key` hold before it clears.
 - A status **pill** pinned to the bottom of every screen: brand · title ·
   model · cost · live feed tail. It never blinks off.
 - **The Deck** (`ctrl+d`) — the machine's HUD. Model, cost, tokens, message
@@ -123,6 +125,7 @@ Nothing else lingers.
 
 ```
 colors.toml              # the palette — the whole rig hangs off this
+hyprland.conf            # the neon cyan→magenta gradient border (theme-dir override)
 backgrounds/*.png        # synthwave wallpapers + lock-screen art
 preview.png              # the neon card image the gallery shows
 preview-unlock.png       # the picker's unlock preview
