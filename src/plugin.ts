@@ -123,7 +123,13 @@ const Pill = ({ api }: any) => {
 };
 
 // Compact: every line stays < 26 chars so it never wraps in a sized dialog.
+// The square face wears an afro — rounded crown, full flare into the box,
+// curled in ░█ (same block language as the boot bar). All rows 19 wide.
 const EMBLEM: string[] = [
+  "  ░█░█░█░█░█░█░█░  ",
+  "░█░█░█░█░█░█░█░█░█░",
+  "░█░█░█░█░█░█░█░█░█░",
+  "  ░█░█░█░█░█░█░█░  ",
   "╭─────────────────╮",
   "│   ◉       ◉     │",
   "│   ────────      │",
