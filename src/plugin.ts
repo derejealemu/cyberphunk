@@ -226,9 +226,11 @@ async function run(api: any) {
     for (const ev of events) {
       try { api.event.on(ev, (p: any) => push(ev, p)); } catch {}
     }
-    // Attention: fire a desktop notification on error/question/permission (blurred only)
+    // Attention: fire a desktop notification on error/question/permission (blurred only).
+    // Honors /cyberphunk.off — notifications are part of what "off" mutes, per README.
     try {
       api.event.on("session.error", (p: any) => {
+        if (!isOn(api)) return; // muted — off means off
         try {
           api.attention?.notify({
             title: "CYBERPHUNK · session error",
@@ -243,18 +245,43 @@ async function run(api: any) {
   }
 
   // 4. Splash — staged boot, hold on READY long enough to read, then clear.
+  //    The host FIRES the prior dialog's onClose on every dialog.replace()/
+  //    clear() (verified in the host binary: it walks the dialog stack and
+  //    calls each onClose before swapping in the new one). So the splash wires
+  //    its teardown to that onClose — the one mechanism an external dialog
+  //    (the deck opening, esc) actually triggers. The trap: our OWN
+  //    frame-to-frame replace would fire that same onClose and cancel the
+  //    boot mid-animation (freezing at frame 1). `advancing` is true only
+  //    across our replace calls, so the onClose invalidates for EXTERNAL
+  //    teardown but ignores our own boot frames.
   try {
     if (isOn(api)) {
-      const show = (frame: number) => {
+      const STEP = 380, HOLD = 1700;
+      let splashGen = 0;
+      let advancing = false; // true only while our own frame-advance replace runs
+      const timers: ReturnType<typeof setTimeout>[] = [];
+      const cancelTimers = () => { for (const t of timers) clearTimeout(t); timers.length = 0; };
+      const invalidate = () => { splashGen++; cancelTimers(); };
+      const show = (gen: number, frame: number) => {
+        if (gen !== splashGen) return; // externally superseded — never touch the dialog
+        advancing = true;
         try {
-          api.ui.dialog.replace(() => createComponent(SplashFrame as any, { api, frame }), () => {});
+          api.ui.dialog.replace(
+            () => createComponent(SplashFrame as any, { api, frame }),
+            () => { if (!advancing) invalidate(); } // external esc/replace — not our own boot
+          );
           api.ui.dialog.setSize("xlarge");
         } catch (e) { errlog("splash", e); }
+        finally { advancing = false; }
       };
-      const STEP = 380, HOLD = 1700;
-      show(0);
-      for (let f = 1; f <= STAGES.length; f++) setTimeout(() => show(f), STEP * f);
-      setTimeout(() => { try { api.ui.dialog.clear(); } catch {} }, STEP * STAGES.length + HOLD);
+      const clearIfOurs = (gen: number) => {
+        if (gen !== splashGen) return; // user opened something else — leave it alone
+        try { api.ui.dialog.clear(); } catch {}
+      };
+      const gen = splashGen;
+      show(gen, 0);
+      for (let f = 1; f <= STAGES.length; f++) timers.push(setTimeout(() => show(gen, f), STEP * f));
+      timers.push(setTimeout(() => clearIfOurs(gen), STEP * STAGES.length + HOLD));
       probe("splash");
     }
   } catch (e) {

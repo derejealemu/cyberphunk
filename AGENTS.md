@@ -39,6 +39,8 @@ add-on under `src/`.
   omarchytheme.com scraper reads. Keep its hex colors consistent with
   `src/cyberphunk.theme.json` when you change the palette. Must stay at the
   repo **root** for the theme scraper to find it.
+- `hyprland.conf` — the Hyprland border override (gradient active border).
+  Copied to the theme dir by `install-theme.sh`.
 - `preview.png` — required by the theme scraper (theme card image).
 - `preview-unlock.png`, `unlock.png`, `backgrounds/*.png` — desktop art.
   Generated (SVG→PNG); regenerate rather than hand-edit if the look changes.

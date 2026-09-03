@@ -11,6 +11,7 @@ DEST="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/themes/cyberphunk"
 
 [ -f "$SRC/colors.toml" ]   || { echo "missing $SRC/colors.toml (this checkout is not a theme repo)"; exit 1; }
 [ -f "$SRC/icons.theme" ]   || { echo "missing $SRC/icons.theme"; exit 1; }
+[ -f "$SRC/hyprland.conf" ] || { echo "missing $SRC/hyprland.conf"; exit 1; }
 [ -f "$SRC/preview.png" ]   || { echo "missing $SRC/preview.png"; exit 1; }
 [ -f "$SRC/preview-unlock.png" ] || { echo "missing $SRC/preview-unlock.png"; exit 1; }
 [ -f "$SRC/unlock.png" ]    || { echo "missing $SRC/unlock.png"; exit 1; }
@@ -19,6 +20,7 @@ DEST="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/themes/cyberphunk"
 echo "→ staging desktop theme → $DEST"
 mkdir -p "$DEST/backgrounds"
 cp -f "$SRC/colors.toml"         "$DEST/colors.toml"
+cp -f "$SRC/hyprland.conf"       "$DEST/hyprland.conf"
 cp -f "$SRC/icons.theme"         "$DEST/icons.theme"
 cp -f "$SRC/preview.png"         "$DEST/preview.png"
 cp -f "$SRC/preview-unlock.png"  "$DEST/preview-unlock.png"

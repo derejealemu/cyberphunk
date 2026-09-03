@@ -1,6 +1,6 @@
 {
   "name": "cyberphunk",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "CyberPhunk — an optimistic cyberpunk reskin for the opencode 1.18.x TUI (neon theme, home logo/footer, 'the deck' HUD, live event feed, cyberpunk verbs).",
   "type": "module",
   "license": "MIT",
@@ -15,7 +15,6 @@
     "typescript": "5.8.2"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit -p .",
-    "install": "bash install.sh"
+    "typecheck": "tsc --noEmit -p ."
   }
 }
