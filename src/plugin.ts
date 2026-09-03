@@ -122,18 +122,19 @@ const Pill = ({ api }: any) => {
   return row(4, children);
 };
 
-// Compact: every line stays < 26 chars so it never wraps in a sized dialog.
-// The square face wears an afro — rounded crown, full flare into the box,
-// curled in ░█ (same block language as the boot bar). All rows 19 wide.
+// Compact: every line stays ≤ 25 chars so it never wraps in a sized dialog.
+// The square face wears an afro — a curl dome that flares FULL-WIDTH at the
+// base (wide-brim, not a toque) and tapers to a rounded crown; the face is
+// centered beneath it. Curled in ░█ (same block language as the boot bar).
 const EMBLEM: string[] = [
-  "  ░█░█░█░█░█░█░█░  ",
-  "░█░█░█░█░█░█░█░█░█░",
-  "░█░█░█░█░█░█░█░█░█░",
-  "  ░█░█░█░█░█░█░█░  ",
-  "╭─────────────────╮",
-  "│   ◉       ◉     │",
-  "│   ────────      │",
-  "╰─────────────────╯",
+  "    ░█░█░█░█░█░█░█░█░    ",
+  "  ░█░█░█░█░█░█░█░█░█░█░  ",
+  " ░█░█░█░█░█░█░█░█░█░█░█░ ",
+  "░█░█░█░█░█░█░█░█░█░█░█░█░",
+  "   ╭─────────────────╮   ",
+  "   │   ◉       ◉     │   ",
+  "   │   ────────      │   ",
+  "   ╰─────────────────╯   ",
 ];
 const STAGES: [string, string][] = [
   ["neon theme", "linked"],
