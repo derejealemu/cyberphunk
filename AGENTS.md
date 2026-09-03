@@ -20,16 +20,30 @@ Rules for AI co-editors (and humans) working in this repo.
    runtime — they aren't resolvable from the plugin's context reliably.
 4. **No hardcoded absolute paths** (`/home/…`, `/Users/…`). Derive them from
    `process.env.HOME`, `XDG_CONFIG_HOME`, `XDG_STATE_HOME`, and `import.meta.url`.
-5. **Typecheck must pass** before any commit: `npm run typecheck`
+5. **Never abbreviate "CyberPhunk"** in user-facing UI. The brand word shows in
+   full — `CYBERPHUNK` (wordmark, pill, footer, headers, toasts). Short forms
+   like `CP` / `Cyph` / `Cphk` are banned from the rendered TUI. The all-caps
+   `CYBERPHUNK` form is the display name; `cyberphunk` is fine for identifiers,
+   file paths, and slash verbs.
+6. **Typecheck must pass** before any commit: `npm run typecheck`
    (or `npx tsc --noEmit -p .`).
 
 ## Where things live
 
 - `src/plugin.ts` — the only runtime artifact. All UI logic, verbs, event
   handlers live here.
-- `src/cyberphunk.theme.json` — the theme (12 colors + semantic aliases).
-  Keep in sync with `~/.config/opencode/themes/cyberphunk.json`.
-- `install.sh` — one-liner installer. Idempotent. Backs up `tui.json`.
+- `src/cyberphunk.theme.json` — the opencode TUI theme (12 colors + semantic
+  aliases). Keep in sync with `~/.config/opencode/themes/cyberphunk.json`.
+- `theme/colors.toml` — the **Omarchy** palette. Single source of truth for the
+  whole desktop (borders, terminals, btop, editors, lock). Keep its 16 hex
+  colors consistent with `src/cyberphunk.theme.json` when you change the palette.
+- `theme/backgrounds/`, `theme/preview*.png`, `theme/unlock.png` — desktop art.
+  Generated (SVG→PNG); regenerate rather than hand-edit if the look changes.
+- `theme/lazygit.yml` — matching lazygit theme (installed by `install-theme.sh`).
+- `install.sh` — one-liner installer for the TUI. Idempotent. Backs up `tui.json`.
+- `install-theme.sh` — one-liner installer for the Omarchy desktop theme. Idempotent;
+  stages `theme/` → `~/.config/omarchy/themes/cyberphunk`, offers the lazygit palette,
+  never overwrites an existing `~/.config/lazygit/config.yml`.
 - `tui.json` (in the *user's* `~/.config/opencode/`) — what actually loads
   the plugin at runtime. Do not commit a `tui.json` in this repo; it's a
   per-machine config.
@@ -44,7 +58,7 @@ There is no test runner. The only reliable oracle is:
    `install.sh`).
 3. Restart opencode (kill the TUI process, not the shell).
 4. Watch `~/.local/state/cyberphunk/log.jsonl` for probe/err lines.
-5. Press `ctrl+d` to open the deck, `q` to close.
+5. Press `ctrl+d` to open the deck, `esc` (or `ctrl+e`) to close.
 6. Check the pane via `tmux capture-pane` (if in tmux) or by eye.
 
 **Do not** rely on `tmux new-session` as the test harness — the test

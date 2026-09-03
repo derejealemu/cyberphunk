@@ -1,9 +1,16 @@
 # CyberPhunk
 
-Cyberpunk reskin. The core is an **opencode** 1.18+ TUI plugin (one plugin file
-+ one theme, loaded through opencode's standard plugin API — no fork, wrapper,
-or daemon). A matching **Omarchy desktop theme** ships alongside: same palette,
-applied system-wide with one `omarchy` command.
+> _the fook is in the machine_
+
+A cyberpunk reskin in two halves that share one palette:
+
+1. **TUI plugin** — an **opencode** 1.18+ plugin (one file) loaded through
+   opencode's standard API. No fork, wrapper, or daemon.
+2. **Desktop theme** — the same palette for an **Omarchy** desktop: Hyprland
+   borders, every terminal, btop, helix, neovim, VS Code, lock screen. One
+   command applies it.
+
+The TUI plugin gives you:
 
 - Neon palette (cyan / pink / amber / slate) via the built-in theme API
 - Logo + footer brand, a 1.5 s boot splash
@@ -15,57 +22,67 @@ applied system-wide with one `omarchy` command.
 
 ## Requirements
 
-- opencode ≥ 1.18 (tested 1.18.23)
-- Nothing else. The bundled Bun inside the opencode binary loads the plugin.
+- **TUI plugin:** opencode ≥ 1.18 (tested 1.18.23). The bundled Bun loads the plugin.
+- **Desktop theme (optional):** [Omarchy](https://omarchy.org). On any other
+  system the palette still works — just point apps at `theme/colors.toml`.
 
-## Install
+## Quick start
+
+```sh
+git clone https://github.com/derejealemu/cyberphunk && cd cyberphunk
+bash install.sh          # opencode TUI → restart opencode
+bash install-theme.sh    # Omarchy desktop theme (optional)
+omarchy theme set cyberphunk
+```
+
+## Install (details)
+
+**TUI plugin**
 
 ```sh
 bash install.sh
 ```
 
-Restart opencode.
-
-Manual install, if you prefer:
+Manual, if you prefer:
 
 ```sh
 mkdir -p ~/.config/opencode/plugins ~/.config/opencode/themes
 cp src/plugin.ts             ~/.config/opencode/plugins/cyberphunk.ts
 cp src/cyberphunk.theme.json ~/.config/opencode/themes/cyberphunk.json
-# add ~/.config/opencode/tui.json:
+# add to ~/.config/opencode/tui.json:
 #   { "theme": "cyberphunk", "plugin": ["~/.config/opencode/plugins/cyberphunk.ts"] }
 ```
 
-## Uninstall
-
-```sh
-rm ~/.config/opencode/plugins/cyberphunk.ts
-# remove the plugin entry from ~/.config/opencode/tui.json
-```
-
-## Omarchy desktop theme (optional)
-
-The `theme/` directory is a complete [Omarchy](https://omarchy.org) theme using
-the same palette: wallpaper/ladder, active-border gradient, all terminals
-(foot/alacritty/kitty), btop, helix, neovim, VS Code, and a synthesized
-lock-screen / theme-picker wordmark. The palette lives in one file —
-`theme/colors.toml` — and every app config is generated from it by Omarchy.
+**Desktop theme**
 
 ```sh
 bash install-theme.sh        # stages ~/.config/omarchy/themes/cyberphunk (+ optional lazygit palette)
 omarchy theme set cyberphunk # apply
-omarchy theme set catppuccin # revert to your previous theme
 ```
 
-On a non-Omarchy machine, drop `theme/` into `~/.config/omarchy/themes/` (or
-point the relevant apps at `theme/colors.toml` / `theme/lazygit.yml`).
+The palette lives in one file — `theme/colors.toml` — and Omarchy generates
+every app config from it (Hyprland borders, terminals, btop, helix, neovim,
+VS Code, the bar, and the lock screen). The desktop theme also carries
+synthwave wallpapers, theme-picker art, and a matching lazygit palette.
+
+## Uninstall
+
+```sh
+# TUI plugin
+rm ~/.config/opencode/plugins/cyberphunk.ts
+# remove the plugin entry from ~/.config/opencode/tui.json
+
+# Desktop theme (revert to your previous theme, then optionally remove it)
+omarchy theme set catppuccin
+rm -rf ~/.config/omarchy/themes/cyberphunk
+```
 
 ## Keyboard & verbs
 
 | What                  | Keyboard        | Verb               |
 | --------------------- | --------------- | ------------------ |
 | The Deck (HUD)        | `ctrl+d`        | `/deck`            |
-| Close deck/dialog     | `ctrl+e` / `q`  | `/deck-close`      |
+| Close deck/dialog     | `ctrl+e` / `esc`  | `/deck-close`      |
 | Enable/disable UI     | —               | `/cyberphunk.on` / `/cyberphunk.off` |
 | Test notification     | —               | `/cyberphunk.notify` |
 | Write API snapshot*   | —               | `/cyberphunk.diag` |
@@ -101,6 +118,21 @@ install.sh               # one-line installer for the opencode TUI (idempotent)
 install-theme.sh         # one-line installer for the Omarchy desktop theme
 package.json  tsconfig.json  AGENTS.md
 ```
+
+## On the bench (ideas, not yet built)
+
+The two halves exist but don't talk to each other yet, and a few pieces of the
+cyberpunk kit are still unbuilt. Ideas in no particular order:
+
+- **Bridge the halves** — a verb like `/cyberphunk.desktop` that runs
+  `omarchy theme set cyberphunk`, and `/cyberphunk.bg next` to cycle the
+  synthwave wallpapers, so the desktop is driven from the TUI (the motif).
+- **Keyboard RGB** — a `theme/keyboard.rgb` matching the palette (Omarchy
+  supports it; we don't ship one yet).
+- **Wallpaper pack** — more than two synthwave scenes; a "city at night" set.
+- **Sound** — a custom boot chime + notification tone instead of stock `error`.
+- **Boot splash 2.0** — glitch/VHS matrix-rain for the 1.5 s splash.
+- **Distribution** — a `curl | bash` one-liner, an AUR package, registry publish.
 
 ## License
 

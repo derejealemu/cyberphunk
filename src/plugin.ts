@@ -15,7 +15,7 @@ import { jsx } from "@opentui/solid/jsx-runtime";
 import { createComponent } from "@opentui/solid";
 
 const ID = "das.cyberphunk";
-const VERSION = "1.0.0";
+const VERSION = "1.2.0";
 const THEME = "cyberphunk";
 
 // Portable path resolution (no hardcoded user paths).
@@ -105,13 +105,14 @@ const Footer = () => row(2, [
   txt(FOOT, "· ctrl+d deck · /deck open · /cyberphunk.off"),
 ]);
 
-// Inline persistent pill (app_bottom, shown on every screen)
+// Inline persistent pill (app_bottom, shown on every screen).
+// Full brand word — never abbreviated, per the project's hard rule.
 const Pill = ({ api }: any) => {
   const d = readState(api);
-  const last = feed[0] ?? "(quiet)";
+  const last = feed[0] ?? "quiet";
   const children: any[] = [
     txt(CYAN, "◉", { fontWeight: "bold" }),
-    txt(FOOT, "CP"),
+    txt(CYAN, "CYBERPHUNK", { fontWeight: "bold" }),
     txt(FOOT, "·"),
     txt(d.home ? FOOT : CYAN, d.home ? "home" : (d.title ?? "session").slice(0, 40)),
     txt(d.model === "—" ? FOOT : CYAN, d.model),
@@ -121,18 +122,50 @@ const Pill = ({ api }: any) => {
   return row(4, children);
 };
 
-const Splash = () => jsx("box", {
-  gap: 2, padding: 4, backgroundColor: BG, borderColor: CYAN, border: [true, true, true, true],
-  children: [
-    txt(CYAN, "  ╔══════════════════════════════════════════════════╗", { fontWeight: "bold" }),
-    txt(CYAN, "  ║", { fontWeight: "bold" }),
-    txt(PINK, "   CYBERPHUNK v" + VERSION, { fontWeight: "bold" }),
-    txt(CYAN, "  ║", { fontWeight: "bold" }),
-    txt(CYAN, "  ║ linking into the machine...", { fontWeight: "bold" }),
-    txt(CYAN, "  ╚══════════════════════════════════════════════════╝", { fontWeight: "bold" }),
-    txt(FOOT, "   the fook is in the machine · optimize · fook"),
-  ]
-});
+// Compact: every line stays < 26 chars so it never wraps in a sized dialog.
+const EMBLEM: string[] = [
+  "╭─────────────────╮",
+  "│   ◉       ◉     │",
+  "│   ────────      │",
+  "╰─────────────────╯",
+];
+const STAGES: [string, string][] = [
+  ["neon theme", "linked"],
+  ["deck + pill", "live"],
+  ["fook", "online"],
+];
+const PROGRESS = [12, 48, 82, 100];
+const BAR_LEN = 12;
+
+const SplashFrame = ({ frame }: { frame: number }) => {
+  const ready = frame >= STAGES.length;
+  const pct = PROGRESS[Math.min(frame, PROGRESS.length - 1)] ?? 0;
+  const filled = Math.round((pct / 100) * BAR_LEN);
+  const bar = "█".repeat(filled) + "░".repeat(BAR_LEN - filled);
+  const lit = STAGES.slice(0, frame);
+  const state = ready ? "READY" : "BOOT";
+  const head = (state + " · v" + VERSION).padEnd(18) + (ready ? "◆" : "⠋");
+  const children: any[] = [
+    txt(CYAN, "CYBERPHUNK", { fontWeight: "bold" }),
+    txt(PINK, "the fook is in the machine"),
+    ...EMBLEM.map((l) => txt(CYAN, l, { fontWeight: "bold" })),
+    txt(FOOT, head, { fontWeight: ready ? "bold" : "normal" }),
+    ...lit.map(([k, v]) => txt(CYAN, "▸ " + k.padEnd(14) + v)),
+    txt(pct >= 100 ? AMBER : FOOT, "boot [" + bar + "] " + pct + "%"),
+    ...(ready ? [txt(PINK, "◆ READY — press a key", { fontWeight: "bold" })] : []),
+  ];
+  return jsx("box", {
+    gap: 1,
+    padding: [3, 4, 3, 4],
+    backgroundColor: BG,
+    borderColor: CYAN,
+    border: [true, true, true, true],
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    children,
+  });
+};
 
 const Deck = ({ api }: any) => {
   const d = readState(api);
@@ -152,7 +185,7 @@ const Deck = ({ api }: any) => {
     col(0, [ txt(PINK, "    ▮ todos", { fontWeight: "bold" }), ...todoLines ]),
     col(0, [ txt(PINK, "    ▮ live event feed", { fontWeight: "bold" }), ...lines ]),
     ...(d.err ? [txt(PINK, "    ⚠ " + d.err)] : []),
-    txt(FOOT, "    q / esc → close deck      ctrl+d → open"),
+    txt(FOOT, "    esc / ctrl+e → close deck      ctrl+d → open"),
   ];
   return jsx("box", { gap: 2, padding: 1, backgroundColor: BG, borderColor: CYAN, border: [true, true, true, true], children });
 };
@@ -209,12 +242,19 @@ async function run(api: any) {
     probe("feed-ok", { events });
   }
 
-  // 4. Splash — auto-clears after 1.5s
+  // 4. Splash — staged boot, hold on READY long enough to read, then clear.
   try {
     if (isOn(api)) {
-      api.ui.dialog.replace(() => createComponent(Splash as any, { api }), () => {});
-      api.ui.dialog.setSize("medium");
-      setTimeout(() => { try { api.ui.dialog.clear(); } catch {} }, 1500);
+      const show = (frame: number) => {
+        try {
+          api.ui.dialog.replace(() => createComponent(SplashFrame as any, { api, frame }), () => {});
+          api.ui.dialog.setSize("xlarge");
+        } catch (e) { errlog("splash", e); }
+      };
+      const STEP = 380, HOLD = 1700;
+      show(0);
+      for (let f = 1; f <= STAGES.length; f++) setTimeout(() => show(f), STEP * f);
+      setTimeout(() => { try { api.ui.dialog.clear(); } catch {} }, STEP * STAGES.length + HOLD);
       probe("splash");
     }
   } catch (e) {
@@ -282,7 +322,7 @@ async function run(api: any) {
       bindings: [
         { key: "ctrl+d", desc: "Open the deck", group: "Global", cmd: openDeck },
         { key: "ctrl+e", desc: "Close the deck", group: "Global", cmd: closeDeck },
-        { key: "q", desc: "Close the deck", group: "Deck dialog", cmd: closeDeck },
+        { key: "esc", desc: "Close the deck", group: "Deck dialog", cmd: closeDeck },
       ],
     });
     probe("verbs-ok");
