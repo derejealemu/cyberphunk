@@ -43,7 +43,8 @@ add-on under `src/`.
   Copied to the theme dir by `install-theme.sh`.
 - `preview.png` — required by the theme scraper (theme card image).
 - `preview-unlock.png`, `unlock.png`, `backgrounds/*.png` — desktop art.
-  Generated (SVG→PNG); regenerate rather than hand-edit if the look changes.
+  Regenerate from source artwork rather than hand-editing raster pixels when the
+  look changes.
 - `icons.theme`, `lazygit.yml` — icon-set preference and matching lazygit palette.
 - `src/plugin.ts` — the opencode TUI plugin (entry point; all UI logic, verbs,
   event handlers).

@@ -20,7 +20,8 @@ Two kits, one fook:
 1. **The desktop theme** (the main event) — one `colors.toml` at the repo
    root, and Omarchy does the rest: neon Hyprland borders with a cyan→magenta
    glow, every terminal, btop, helix, nvim, VS Code, the bar, the lock
-   screen. Comes with synthwave wallpapers that double as your lock screen.
+   screen. Comes with cosmic-funk future-city wallpapers that double as your
+   lock screen.
 2. **The opencode TUI plugin** (the cherry) — a boot splash that actually
    *boots*, a status pill that never blinks off, **The Deck** (`ctrl+d`)
    where the machine talks back to you, and a verb set that sounds better
@@ -87,12 +88,15 @@ omarchy theme set cyberphunk
 - `hyprland.conf` — the signature: a neon cyan→magenta **gradient** on the
   active window border (ships as a theme-dir override, the same mechanism
   retro-82/kanagawa/lumon use).
-- `backgrounds/1-synthwave-hero.png` + `backgrounds/2-synthwave-sun.png` —
-  two synthwave scenes. They're your wallpaper *and* your lock screen (Omarchy
+- `backgrounds/*.png` — four cosmic-funk futures: the Mothership arriving as
+  the world's biggest synth party, a fusion-lit garden city that already solved
+  the boring problems, a serene orbital soul station, and the Last Train Home—
+  silent clean transit carrying people through a restored forest toward warm
+  lights in the valley. They're your wallpaper *and* your lock screen (Omarchy
   blurs the current wallpaper behind the lock panel).
 
 <p align="center">
-  <img src="backgrounds/2-synthwave-sun.png" width="720" alt="a synthwave scene from backgrounds/ — the wallpaper and lock-screen art">
+  <img src="backgrounds/2-synthwave-sun.png" width="720" alt="a fusion-lit garden city from backgrounds/ — the wallpaper and lock-screen art">
 </p>
 - `preview.png`, `preview-unlock.png`, `unlock.png` — the neon wordmark that
   shows up in the theme picker and at unlock.
@@ -152,7 +156,7 @@ Nothing else lingers.
 ```
 colors.toml              # the palette — the whole rig hangs off this
 hyprland.conf            # the neon cyan→magenta gradient border (theme-dir override)
-backgrounds/*.png        # synthwave wallpapers + lock-screen art
+backgrounds/*.png        # cosmic-funk wallpapers + lock-screen art
 preview.png              # the neon card image the gallery shows
 preview-unlock.png       # the picker's unlock preview
 unlock.png               # the wordmark on the unlock screen
@@ -190,8 +194,8 @@ Things we keep meaning to build:
   So the terminal drives the desktop, and the desktop answers.
 - **Keyboard RGB** — a `keyboard.rgb` matching the palette, so even the
   keys glow.
-- **A wallpaper pack** — two synthwave scenes is a start; we want a
-  "city at night" set.
+- **A wallpaper pack** — four cosmic-funk scenes is a start; the Mothership
+  always has another destination.
 - **Sound** — a real boot chime + a notification tone that actually sounds
   like something worth hearing.
 - **Registry** — an AUR package and/or a `curl | bash` one-liner, because
